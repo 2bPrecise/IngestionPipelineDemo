@@ -4,7 +4,7 @@ namespace ToBePrecise.Demo.DataApi.Configurations
     {
         public string Uri { get; set; }
         public string InboxTopic { get; set; }
-        public string MessageTimeout { get; set; } = "30";
+        public int MessageTimeoutMs { get; set; } = 5000;
 
     }
 }

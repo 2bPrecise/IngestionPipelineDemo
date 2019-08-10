@@ -17,7 +17,7 @@ namespace ToBePrecise.Demo.DataApi.FileStorage
         public async Task<FileMetadata> Upload(Stream inputStream, string OriginalName)
         {
             string fileId = Guid.NewGuid().ToString();
-            string relativePath = fileId + "." + Path.GetExtension(OriginalName);
+            string relativePath = fileId + Path.GetExtension(OriginalName);
             string fullPath = Path.Combine(BasePath, relativePath);
             using (Stream file = File.Create(fullPath)) {
                 await inputStream.CopyToAsync(file);

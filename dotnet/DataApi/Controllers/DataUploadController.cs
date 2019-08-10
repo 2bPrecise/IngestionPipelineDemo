@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +33,10 @@ namespace ToBePrecise.Demo.DataApi.Controllers
         public async Task<FileMetadata> Ingest(IFormFile file)
         {
             var metadata = await _storage.Upload(file.OpenReadStream(), file.FileName);
-            await _sender.Send(metadata);
+            var success = await _sender.Send(metadata);
+            if (!success) {
+                throw new Exception("Failed upload");
+            }
             return metadata;
         }
 
