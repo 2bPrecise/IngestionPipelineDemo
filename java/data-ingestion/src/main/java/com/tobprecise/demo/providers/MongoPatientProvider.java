@@ -15,6 +15,10 @@ public class MongoPatientProvider implements IPatientProvider {
 
 	private Datastore datastore;
 
+	public MongoPatientProvider(String uri) {
+		this(new MongoClientURI(uri));
+	}
+	
 	public MongoPatientProvider(MongoClientURI uri) {
 		MongoClient mongoClient = new MongoClient(uri);
 		final Morphia morphia = new Morphia();

@@ -1,0 +1,8 @@
+fileBasePath: "/tmp"
+kafkaBroker: "127.0.0.1:32768"
+inboxTopic: "inbox"
+recordsTopic: "records"
+mongoConnectionString: "mongodb://tbpstorm:qde214@localhost:27017/clinical"
+redisHost: "127.0.0.1"
+redisPort: 32769
+submit: true

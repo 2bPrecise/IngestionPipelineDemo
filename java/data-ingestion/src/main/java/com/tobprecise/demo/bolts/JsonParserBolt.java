@@ -13,10 +13,11 @@ import com.tobprecise.demo.topologies.ParserTopology;
 
 public class JsonParserBolt  extends BaseRichBolt {
 
+	private OutputCollector _collector;
+
 	@Override
-	public void prepare(Map<String, Object> topoConf, TopologyContext context, OutputCollector collector) {
-		// TODO Auto-generated method stub
-		
+	public void prepare(Map<String, Object> config, TopologyContext context, OutputCollector collector) {
+		_collector = collector;
 	}
 
 	@Override

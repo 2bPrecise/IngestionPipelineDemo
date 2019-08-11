@@ -12,22 +12,30 @@ public class RedisContextProvider implements IContextProvider {
 
 	private JedisCommandsInstanceContainer container;
 
+	public RedisContextProvider(String host, int port) {
+		this(new JedisPoolConfig.Builder().setHost(host).setPort(port).build());
+	}
+	
 	public RedisContextProvider(JedisPoolConfig jedisPoolConfig) {
 		Objects.requireNonNull(jedisPoolConfig);
 		this.container = JedisCommandsContainerBuilder.build(jedisPoolConfig);
 	}
 	
-	public String initializeContext(String fileId, String fileName, int items) {
+	public String initializeContext(String fileId, String fileName) {
 		String contextId = UUID.randomUUID().toString();
 		String key = contextKey(contextId);
 		container.getInstance().hset(key, "fileId", fileId.toString());
 		container.getInstance().hset(key, "fileName", fileName);
-		container.getInstance().hincrBy(key, "items", items);
 		String reversekey = contextKey(fileId);
 		container.getInstance().hset(reversekey, "contextId", contextId);
 		return contextId;
 	}
 
+	public void setExpectedItems(String contextId, int items) {
+		String key = contextKey(contextId);
+		container.getInstance().hincrBy(key, "items", items);
+	}
+	
 	public void finishItem(String contextId, int itemId) {
 		String key = contextKey(contextId);
 		container.getInstance().hincrBy(key, Integer.toString(itemId), 1);		

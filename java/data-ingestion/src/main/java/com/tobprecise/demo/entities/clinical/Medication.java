@@ -21,4 +21,5 @@ public class Medication implements IClinicalAct {
 	public enum Status { 
 		Active, Inactive, EnteredInError
 	}
+
 }

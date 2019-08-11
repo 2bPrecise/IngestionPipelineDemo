@@ -10,16 +10,16 @@ import org.apache.storm.tuple.Tuple;
 
 public class DiscardBolt  extends BaseRichBolt {
 
+	private OutputCollector _collector;
+
 	@Override
-	public void prepare(Map<String, Object> topoConf, TopologyContext context, OutputCollector collector) {
-		// TODO Auto-generated method stub
-		
+	public void prepare(Map<String, Object> config, TopologyContext context, OutputCollector collector) {
+		_collector = collector;
 	}
 
 	@Override
 	public void execute(Tuple input) {
-		// TODO Auto-generated method stub
-		
+		_collector.ack(input);
 	}
 
 	@Override
