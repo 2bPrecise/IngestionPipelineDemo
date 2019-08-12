@@ -10,24 +10,31 @@ import org.apache.storm.tuple.Tuple;
 
 import com.tobprecise.demo.config.AppConfig;
 import com.tobprecise.demo.config.AppConfigReader;
-import com.tobprecise.demo.providers.IContextProvider;
+import com.tobprecise.demo.entities.dto.EntityDto;
+import com.tobprecise.demo.providers.IEntityProducer;
 import com.tobprecise.demo.providers.ProviderFactory;
 
 public class KafkaProducerBolt  extends BaseRichBolt {
 
 	private OutputCollector _collector;
-	private IContextProvider _contextProvider;
+	private IEntityProducer _producer;
 
 	@Override
 	public void prepare(Map<String, Object> config, TopologyContext context, OutputCollector collector) {
 		_collector = collector;
 		AppConfig appConfig = AppConfigReader.read(config);
-		_contextProvider = ProviderFactory.getContextProvider(appConfig);
+		_producer = ProviderFactory.getEntityRecordsProducer(appConfig);
 	}
 
 	@Override
 	public void execute(Tuple input) {
-		// TODO Auto-generated method stub
+		EntityDto entity = (EntityDto) input.getValueByField(RecordScheme.RECORD);
+		try {
+			_producer.produce(entity);
+			_collector.ack(input);
+		} catch (Exception e) {
+			_collector.fail(input);
+		}
 		
 	}
 

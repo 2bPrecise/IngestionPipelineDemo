@@ -1,0 +1,25 @@
+package com.tobprecise.demo.entities.dto;
+
+import java.io.Serializable;
+
+// all fields should be lower-case for easy deserializing
+public class EntityDto implements Serializable {
+	
+	// indicate demography or medication
+	public String type;
+
+	// Demography fields
+	public String givenname;
+	public String familyname;
+	public String gender;
+	public String dateofbirth;
+	public String isdeceased;
+	
+	// Medication fields
+	public String clinicalactid;
+	public String rxnumber;
+	public String start;
+	public String end;
+	public String status;
+	// age is calculated according to start and date of birth
+}

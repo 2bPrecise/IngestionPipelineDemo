@@ -15,4 +15,8 @@ public class ProviderFactory {
 	public static IFileProvider getFileProvider(AppConfig config) {
 		return new DiskFileProvider(config.fileBasePath);
 	}
+	
+	public static IEntityProducer getEntityRecordsProducer(AppConfig config) {
+		return new KafkaEntityProducer(config.kafkaBroker, config.recordsTopic);
+	}
 }
