@@ -46,18 +46,21 @@ public class JsonParserBolt  extends BaseRichBolt {
 
 	@Override
 	public void execute(Tuple input) {
-		String context = input.getStringByField(RecordScheme.CONTEXT_ID);
+		String contextId = input.getStringByField(RecordScheme.CONTEXT_ID);
 		FileMetadata metadata = (FileMetadata) input.getValueByField(RecordScheme.RECORD);
 		
 		try (Reader reader = new InputStreamReader(_fileProvider.download(metadata))) {
 			List<Map<String,String>> records = _gson.fromJson(reader, _typeToken);
-			_contextProvider.setExpectedItems(context, records.size());
+			_contextProvider.setExpectedItems(contextId, records.size());
+			int recordNumber = 0;
 			for (Map<String,String> record: records) {
 				EntityDto row = DtoBuilder.build(record);
-				_collector.emit(ParserTopology.Streams.JSON, input, new Values(context, row));
+				String recordContextId = _contextProvider.contextIdWithItem(contextId, recordNumber);
+				_collector.emit(ParserTopology.Streams.JSON, input, new Values(recordContextId, row));
+				recordNumber++;
 			}
 		} catch (Throwable t) { 
-			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values(context, metadata, "Error: " + t.getMessage()));
+			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values(contextId, metadata, "Error: " + t.getMessage()));
 		}
 		_collector.ack(input);
 	}

@@ -36,11 +36,20 @@ public class RedisContextProvider implements IContextProvider {
 		container.getInstance().hincrBy(key, "items", items);
 	}
 	
-	public void finishItem(String contextId, int itemId) {
+	@Override
+	public void finishItem(String contextAndItemId) {
+		int dot = contextAndItemId.lastIndexOf('.');
+		int itemId = Integer.parseInt(contextAndItemId.substring(dot+1));
+		String contextId = contextAndItemId.substring(0, dot);
+		finishItem(contextId, itemId);
+	}
+	
+	private void finishItem(String contextId, int itemId) {
 		String key = contextKey(contextId);
 		container.getInstance().hincrBy(key, Integer.toString(itemId), 1);		
 	}
 
+	@Override
 	public Boolean isFinished(String contextId) {
 		String key = contextKey(contextId);
 		Map<String, String> all = container.getInstance().hgetAll(key);
@@ -54,6 +63,11 @@ public class RedisContextProvider implements IContextProvider {
 		return true;
 	}
 	
+	@Override
+	public String contextIdWithItem(String contextId, int itemId) {
+		return contextId + "." + itemId;
+	}
+
 	private String contextKey(String contextId) {
 		return "context" + contextId.toString();
 	}

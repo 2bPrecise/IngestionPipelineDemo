@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 public class Medication implements IClinicalAct {
-	//@Getter @Setter private String patientId;
+	@Getter @Setter private String patientId;
 	@Getter @Setter private String clinicalActId;
 	@Getter @Setter private String rxNumber;
 	@Getter @Setter private Date start;

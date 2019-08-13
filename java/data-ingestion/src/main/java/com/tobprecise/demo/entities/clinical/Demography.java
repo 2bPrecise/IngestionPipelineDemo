@@ -9,7 +9,8 @@ import lombok.ToString;
 
 @ToString
 @EqualsAndHashCode
-public class Demography {
+public class Demography implements IClinicalEntity {
+	@Getter @Setter private String patientId;
 	@Getter @Setter private String givenName;
 	@Getter @Setter private String familyName;
 	@Getter @Setter private Gender gender;

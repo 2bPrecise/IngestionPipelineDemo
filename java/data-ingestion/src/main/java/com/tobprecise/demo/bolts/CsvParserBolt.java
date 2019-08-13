@@ -42,7 +42,7 @@ public class CsvParserBolt  extends BaseRichBolt {
 
 	@Override
 	public void execute(Tuple input) {
-		String context = input.getStringByField(RecordScheme.CONTEXT_ID);
+		String contextId = input.getStringByField(RecordScheme.CONTEXT_ID);
 		FileMetadata metadata = (FileMetadata) input.getValueByField(RecordScheme.RECORD);
 		
 		try (Reader reader = new InputStreamReader(_fileProvider.download(metadata))) {
@@ -50,12 +50,13 @@ public class CsvParserBolt  extends BaseRichBolt {
 			int recordNumber = 0;
 			for (CSVRecord record : records) {
 				EntityDto row = DtoBuilder.build(record.toMap());
-				_collector.emit(ParserTopology.Streams.CSV, input, new Values(context, row));
+				String recordContextId = _contextProvider.contextIdWithItem(contextId, recordNumber);
+				_collector.emit(ParserTopology.Streams.CSV, input, new Values(recordContextId, row));
 				recordNumber++;
 			}
-			_contextProvider.setExpectedItems(context, recordNumber);
+			_contextProvider.setExpectedItems(contextId, recordNumber);
 		} catch (Throwable t) { 
-			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values(context, metadata, "Error: " + t.getMessage()));
+			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values(contextId, metadata, "Error: " + t.getMessage()));
 		}
 		_collector.ack(input);
 	}

@@ -7,15 +7,21 @@ public class EntityDto implements Serializable {
 	
 	// indicate demography or medication
 	public String type;
+	
+	// helper to carry the context between topologies
+	public String contextid;
 
-	// Demography fields
+	// all records must have a patient id
+	public String patientid;
+
+	// Demography specific fields
 	public String givenname;
 	public String familyname;
 	public String gender;
 	public String dateofbirth;
 	public String isdeceased;
 	
-	// Medication fields
+	// Medication specific fields
 	public String clinicalactid;
 	public String rxnumber;
 	public String start;
