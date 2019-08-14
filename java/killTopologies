@@ -1,0 +1,2 @@
+/usr/lib/apache-storm/bin/storm kill parser-topology -w 5
+/usr/lib/apache-storm/bin/storm kill processor-topology -w 5

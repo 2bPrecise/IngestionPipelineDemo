@@ -1,0 +1,2 @@
+/usr/lib/apache-storm/bin/storm jar data-ingestion/target/data-ingest-demo-0.0.1.jar com.tobprecise.demo.topologies.ParserTopology config/azurevm.yaml
+/usr/lib/apache-storm/bin/storm jar data-ingestion/target/data-ingest-demo-0.0.1.jar com.tobprecise.demo.topologies.ProcessorTopology config/azurevm.yaml

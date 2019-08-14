@@ -1,0 +1,8 @@
+fileBasePath: "/datadrive/lake"
+kafkaBroker: "127.0.0.1:32768"
+inboxTopic: "inbox"
+recordsTopic: "records"
+mongoConnectionString: "mongodb://localhost:27017/clinical"
+redisHost: "127.0.0.1"
+redisPort: 6379
+submit: true
