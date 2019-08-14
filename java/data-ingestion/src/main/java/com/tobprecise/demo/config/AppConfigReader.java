@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -26,10 +27,27 @@ public class AppConfigReader {
 	}
 	
 	public static AppConfig read(Map<String, Object> stormConfig) {
-		return (AppConfig) stormConfig.get("app");
+		AppConfig appConfig = new AppConfig();
+		for (Field field : Class.class.getDeclaredFields()) {
+			if (field.isAccessible()) {
+				try {
+					field.set(appConfig, stormConfig.get("app." + field.getName()));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+				}
+			}
+		}
+		return appConfig;
 	}
+	
 	public static void write(Map<String, Object> stormConfig, AppConfig appConfig) {
-		stormConfig.put("app", appConfig);
+		for (Field field : Class.class.getDeclaredFields()) {
+			if (field.isAccessible()) {
+				try {
+					stormConfig.put("app." + field.getName(), field.get(appConfig));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+				}
+			}
+		}
 	}
 	
 	public static KafkaSpoutConfig createKafkaSpoutConfig(AppConfig appConfig, String topic, Class valueDeserializer) {
