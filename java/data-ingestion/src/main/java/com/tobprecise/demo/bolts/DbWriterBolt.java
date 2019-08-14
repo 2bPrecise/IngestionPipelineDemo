@@ -6,6 +6,7 @@ import org.apache.storm.task.OutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichBolt;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 
 import com.tobprecise.demo.config.AppConfig;
@@ -16,6 +17,7 @@ import com.tobprecise.demo.entities.clinical.Medication;
 import com.tobprecise.demo.providers.IContextProvider;
 import com.tobprecise.demo.providers.IPatientProvider;
 import com.tobprecise.demo.providers.ProviderFactory;
+import com.tobprecise.demo.topologies.ProcessorTopology;
 
 public class DbWriterBolt  extends BaseRichBolt {
 
@@ -49,6 +51,7 @@ public class DbWriterBolt  extends BaseRichBolt {
 
 	@Override
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declareStream(ProcessorTopology.Streams.DISCARD, new Fields(RecordScheme.CONTEXT_ID, RecordScheme.RECORD, RecordScheme.REASON));		
 	}
 
 }
