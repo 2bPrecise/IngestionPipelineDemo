@@ -11,4 +11,5 @@ public class AppConfig implements Serializable {
 	public String redisHost;
 	public int redisPort;
 	public boolean submit;
+	public int localRunForSeconds;
 }

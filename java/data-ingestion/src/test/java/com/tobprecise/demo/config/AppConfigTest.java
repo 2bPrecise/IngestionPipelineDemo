@@ -17,7 +17,7 @@ public class AppConfigTest {
 	@Test
 	public void test() throws FileNotFoundException, IOException, IllegalArgumentException, IllegalAccessException {
 		File tempFile = File.createTempFile("/tmp", "conf.yaml");
-		FileUtils.writeStringToFile(tempFile, "redisPort: 32769\nsubmit: true", Charset.defaultCharset());
+		FileUtils.writeStringToFile(tempFile, "redisPort: 32769\nsubmit: true\ninboxTopic: abcd", Charset.defaultCharset());
 		AppConfig appConfig = AppConfigReader.read(tempFile.getPath());
 		Config stormConfig = new Config();
 		AppConfigReader.write(stormConfig, appConfig);
@@ -26,6 +26,11 @@ public class AppConfigTest {
 		stormConfig.setNumWorkers(1);	
 		
 		assertTrue(Utils.isValidConf(stormConfig));
+		
+		AppConfig appConfig2 = AppConfigReader.read(stormConfig);
+		assertEquals(32769, appConfig2.redisPort);
+		assertTrue(appConfig2.submit);
+		assertEquals("abcd", appConfig2.inboxTopic);
 	}
 
 }

@@ -56,7 +56,7 @@ public class ProcessorTopology {
 		} else {
 			try (LocalCluster cluster = new LocalCluster()) {
 				cluster.submitTopology(TOPOLOGY_ID, stormConfig, topology);
-				Utils.sleep(5000);
+				Utils.sleep(appConfig.localRunForSeconds * 1000);
 			    KillOptions opts = new KillOptions();
 			    opts.set_wait_secs(5);
 			    cluster.killTopologyWithOpts(TOPOLOGY_ID, opts);
