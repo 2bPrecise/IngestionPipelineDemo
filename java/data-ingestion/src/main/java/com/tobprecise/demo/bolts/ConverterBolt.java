@@ -35,6 +35,8 @@ public class ConverterBolt  extends BaseRichBolt {
 			dto = (EntityDto) input.getValueByField(RecordScheme.VALUE);
 		} catch (Exception ex) {
 			_collector.emit(ProcessorTopology.Streams.DISCARD, input, new Values(null, null, ex.getMessage()));
+			_collector.ack(input);
+			return;
 		}
 		
 		IClinicalEntity clinical = null;

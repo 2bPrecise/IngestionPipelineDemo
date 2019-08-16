@@ -14,7 +14,7 @@ import org.junit.rules.TemporaryFolder;
 
 public abstract class TopologyTestBase  {	
 	
-	private Properties prop = new Properties();
+	protected Properties prop = new Properties();
 	
 	@Rule
 	public TemporaryFolder lakeFolder = new TemporaryFolder();
@@ -27,7 +27,6 @@ public abstract class TopologyTestBase  {
 		prop.setProperty("inboxTopic", "inbox");
 		prop.setProperty("recordsTopic", "records");
 		prop.setProperty("kafkaBroker", "local");
-		
 		prop.setProperty("submit", "false");
 	}
 	

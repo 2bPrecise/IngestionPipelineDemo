@@ -36,7 +36,17 @@ public class FileTypeDispatcherBolt extends BaseRichBolt {
 	@Override
 	public void execute(Tuple input) {
 		
-		FileMetadata metadata = _gson.fromJson(input.getString(0), FileMetadata.class);
+		FileMetadata metadata = null;
+		
+		try {
+			String inputJson = input.getStringByField(RecordScheme.VALUE);
+			metadata = _gson.fromJson(inputJson, FileMetadata.class);
+		} catch (Exception ex) {
+			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values("", null, ex.getMessage()));
+			_collector.ack(input);		
+			return;
+		}
+		
 		String context = _contextProvider.initializeContext(metadata.getFileId(), metadata.getOriginalName());
 		
 		if (isCsv(metadata.getOriginalName())) {

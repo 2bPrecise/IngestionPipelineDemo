@@ -43,7 +43,7 @@ public class CsvParserBolt  extends BaseRichBolt {
 	@Override
 	public void execute(Tuple input) {
 		String contextId = input.getStringByField(RecordScheme.CONTEXT_ID);
-		FileMetadata metadata = (FileMetadata) input.getValueByField(RecordScheme.RECORD);
+		FileMetadata metadata = (FileMetadata) input.getValueByField(RecordScheme.FILE_METADATA);
 		
 		try (Reader reader = new InputStreamReader(_fileProvider.download(metadata))) {
 			Iterable<CSVRecord> records = _csvFormat.parse(reader);

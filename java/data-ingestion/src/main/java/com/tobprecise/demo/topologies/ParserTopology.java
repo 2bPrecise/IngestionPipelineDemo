@@ -26,7 +26,7 @@ public class ParserTopology {
 		TopologyBuilder builder = new TopologyBuilder();
 		
 		builder.setSpout(Components.SPOUT, new KafkaSpout(
-				AppConfigReader.createKafkaSpoutConfig(appConfig, appConfig.recordsTopic, StringDeserializer.class)
+				AppConfigReader.createKafkaSpoutConfig(appConfig, appConfig.inboxTopic, StringDeserializer.class)
 				));
 		
 		builder.setBolt(Components.DISPATCHER, new FileTypeDispatcherBolt())
