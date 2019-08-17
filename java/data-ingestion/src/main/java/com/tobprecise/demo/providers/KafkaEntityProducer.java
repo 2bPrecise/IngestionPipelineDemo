@@ -5,8 +5,8 @@ import java.util.Properties;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringSerializer;
 
-import com.esotericsoftware.kryo.serializers.DefaultSerializers.StringSerializer;
 import com.tobprecise.demo.entities.dto.DtoSerializer;
 import com.tobprecise.demo.entities.dto.EntityDto;
 
