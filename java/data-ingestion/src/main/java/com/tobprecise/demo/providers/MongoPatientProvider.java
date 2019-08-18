@@ -1,6 +1,7 @@
 package com.tobprecise.demo.providers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -28,18 +29,28 @@ public class MongoPatientProvider implements IPatientProvider {
 	}
 	
 	public Patient getPatient(String patientId) {
-		return datastore.createQuery(Patient.class)
-        .filter("patientId", patientId).find().toList().get(0);
+		List<Patient> found = datastore.createQuery(Patient.class)
+        .filter("patientId", patientId).find().toList();
+		if (found.size() > 0) { 
+			return found.get(0);
+		}
+		return null;
 	}
 
 	public void saveDemography(String patientId, Demography demography) {
 		Patient patient = getPatient(patientId);
+		if (patient == null) {
+			return;
+		}
 		patient.setDemography(demography);
 		datastore.save(patient);
 	}
 
 	public void saveMedication(String patientId, Medication medication) {
 		Patient patient = getPatient(patientId);
+		if (patient == null) {
+			return;
+		}
 		if (patient.getMedications() == null) {
 			patient.setMedications(new ArrayList<Medication>());
 		}

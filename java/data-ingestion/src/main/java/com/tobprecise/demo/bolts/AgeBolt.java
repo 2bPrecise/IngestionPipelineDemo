@@ -43,7 +43,8 @@ public class AgeBolt  extends BaseRichBolt {
 		IClinicalAct act = (IClinicalAct) input.getValueByField(RecordScheme.RECORD);
 
 		Patient patient = _patientProvider.getPatient(act.getPatientId());
-		if (patient.getDemography().getDateOfBirth() != null && act.getStart() != null) {
+		if (patient != null && patient.getDemography() != null && 
+				patient.getDemography().getDateOfBirth() != null && act.getStart() != null) {
 			long diffInMillies = act.getStart().getTime() - patient.getDemography().getDateOfBirth().getTime();
 			long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 			act.setAge(diff / 365);
