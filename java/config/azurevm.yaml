@@ -1,5 +1,5 @@
 fileBasePath: "/datadrive/lake"
-kafkaBroker: "127.0.0.1:32768"
+kafkaBroker: "127.0.0.1:9092"
 inboxTopic: "inbox"
 recordsTopic: "records"
 mongoConnectionString: "mongodb://localhost:27017/clinical"
