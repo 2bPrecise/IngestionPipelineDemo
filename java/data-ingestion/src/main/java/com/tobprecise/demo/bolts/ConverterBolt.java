@@ -12,6 +12,7 @@ import org.apache.storm.tuple.Values;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.gson.Gson;
 import com.tobprecise.demo.entities.clinical.ClinicalEntitiesBuilderRegistry;
 import com.tobprecise.demo.entities.clinical.IClinicalEntity;
 import com.tobprecise.demo.entities.clinical.IClinicalAct;
@@ -24,12 +25,14 @@ public class ConverterBolt  extends BaseRichBolt {
 	
 	private OutputCollector _collector;
 	private ClinicalEntitiesBuilderRegistry _clinicalEntityBuilderRegistry;
+	private Gson _gson;
 
 	@Override
 	public void prepare(Map<String, Object> config, TopologyContext context, OutputCollector collector) {
 		Log.debug("preparing");
 		_collector = collector;	
 		_clinicalEntityBuilderRegistry = new ClinicalEntitiesBuilderRegistry();
+		_gson = new Gson();
 	}
 
 	@Override
@@ -38,7 +41,8 @@ public class ConverterBolt  extends BaseRichBolt {
 		
 		EntityDto dto = null;
 		try {
-			dto = (EntityDto) input.getValueByField(RecordScheme.VALUE);
+			String inputJson = input.getStringByField(RecordScheme.VALUE);
+			dto = _gson.fromJson(inputJson, EntityDto.class);
 		} catch (Exception ex) {
 			_collector.emit(ProcessorTopology.Streams.DISCARD, input, new Values(null, null, ex.getMessage()));
 			_collector.ack(input);
