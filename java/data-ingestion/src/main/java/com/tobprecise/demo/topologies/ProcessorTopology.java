@@ -31,7 +31,7 @@ public class ProcessorTopology {
 			.shuffleGrouping(Components.SPOUT);
 		
 		builder.setBolt(Components.AGE, new AgeBolt())
-			.shuffleGrouping(Components.AGE, Streams.ACT);
+			.shuffleGrouping(Components.CONVERTER, Streams.ACT);
 		
 		builder.setBolt(Components.WRITER, new DbWriterBolt())
 			.shuffleGrouping(Components.CONVERTER)
