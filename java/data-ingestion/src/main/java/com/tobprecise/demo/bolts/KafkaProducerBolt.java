@@ -41,7 +41,7 @@ public class KafkaProducerBolt  extends BaseRichBolt {
 			Log.trace("acking {}", input);
 		} catch (Exception e) {
 			_collector.fail(input);
-			Log.trace("failing {}", input);
+			Log.trace("failing {}", e);
 		}
 		
 	}
