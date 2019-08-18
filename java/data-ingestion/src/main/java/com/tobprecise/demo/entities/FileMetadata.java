@@ -3,9 +3,9 @@ package com.tobprecise.demo.entities;
 public class FileMetadata {
 	private String fileId;
 	private String originalName;
-	private String RelativePath;
-	private Long Size;
-	private String UploadedTime;
+	private String relativePath;
+	private Long size;
+	private String uploadedTime;
 	
 	public String getFileId() {
 		return fileId;
@@ -20,30 +20,30 @@ public class FileMetadata {
 		this.originalName = originalName;
 	}
 	public String getRelativePath() {
-		return RelativePath;
+		return relativePath;
 	}
 	public void setRelativePath(String relativePath) {
-		RelativePath = relativePath;
+		this.relativePath = relativePath;
 	}
 	public Long getSize() {
-		return Size;
+		return size;
 	}
 	public void setSize(Long size) {
-		Size = size;
+		this.size = size;
 	}
 	public String getUploadedTime() {
-		return UploadedTime;
+		return uploadedTime;
 	}
 	public void setUploadedTime(String uploadedTime) {
-		UploadedTime = uploadedTime;
+		this.uploadedTime = uploadedTime;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((RelativePath == null) ? 0 : RelativePath.hashCode());
-		result = prime * result + ((Size == null) ? 0 : Size.hashCode());
-		result = prime * result + ((UploadedTime == null) ? 0 : UploadedTime.hashCode());
+		result = prime * result + ((relativePath == null) ? 0 : relativePath.hashCode());
+		result = prime * result + ((size == null) ? 0 : size.hashCode());
+		result = prime * result + ((uploadedTime == null) ? 0 : uploadedTime.hashCode());
 		result = prime * result + ((fileId == null) ? 0 : fileId.hashCode());
 		result = prime * result + ((originalName == null) ? 0 : originalName.hashCode());
 		return result;
@@ -57,20 +57,20 @@ public class FileMetadata {
 		if (getClass() != obj.getClass())
 			return false;
 		FileMetadata other = (FileMetadata) obj;
-		if (RelativePath == null) {
-			if (other.RelativePath != null)
+		if (relativePath == null) {
+			if (other.relativePath != null)
 				return false;
-		} else if (!RelativePath.equals(other.RelativePath))
+		} else if (!relativePath.equals(other.relativePath))
 			return false;
-		if (Size == null) {
-			if (other.Size != null)
+		if (size == null) {
+			if (other.size != null)
 				return false;
-		} else if (!Size.equals(other.Size))
+		} else if (!size.equals(other.size))
 			return false;
-		if (UploadedTime == null) {
-			if (other.UploadedTime != null)
+		if (uploadedTime == null) {
+			if (other.uploadedTime != null)
 				return false;
-		} else if (!UploadedTime.equals(other.UploadedTime))
+		} else if (!uploadedTime.equals(other.uploadedTime))
 			return false;
 		if (fileId == null) {
 			if (other.fileId != null)
@@ -86,8 +86,8 @@ public class FileMetadata {
 	}
 	@Override
 	public String toString() {
-		return "FileMetadata [fileId=" + fileId + ", originalName=" + originalName + ", RelativePath=" + RelativePath
-				+ ", Size=" + Size + ", UploadedTime=" + UploadedTime + "]";
+		return "FileMetadata [fileId=" + fileId + ", originalName=" + originalName + ", relativePath=" + relativePath
+				+ ", size=" + size + ", uploadedTime=" + uploadedTime + "]";
 	}
 	
 }
