@@ -8,11 +8,12 @@ public class MedicationBuilder extends ClinicalEntityBuilder<Medication> {
 	public Medication build(EntityDto dto) {
 		Medication medication = new Medication();
 		medication.setPatientId(dto.patientid);
+		medication.setName(dto.medicationname);
 		medication.setClinicalActId(dto.clinicalactid);
 		medication.setRxNumber(dto.rxnumber);
-		medication.setStart(resolveDate(dto.start));
-		medication.setEnd(resolveDate(dto.end));
-		medication.setStatus(resolveEnum(Medication.Status.class, dto.status));
+		medication.setStart(resolveDate(dto.medicationstart));
+		medication.setEnd(resolveDate(dto.medicationend));
+		medication.setStatus(resolveEnum(Medication.Status.class, dto.medicationstatus));
 		return medication;
 	}
 

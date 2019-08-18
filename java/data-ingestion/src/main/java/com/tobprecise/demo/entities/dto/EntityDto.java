@@ -23,9 +23,10 @@ public class EntityDto implements Serializable {
 	
 	// Medication specific fields
 	public String clinicalactid;
+	public String medicationname;
 	public String rxnumber;
-	public String start;
-	public String end;
-	public String status;
+	public String medicationstart;
+	public String medicationend;
+	public String medicationstatus;
 	// age is calculated according to start and date of birth
 }

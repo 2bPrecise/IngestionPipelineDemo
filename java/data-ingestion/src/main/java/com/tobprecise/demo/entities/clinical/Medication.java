@@ -5,6 +5,7 @@ import java.util.Date;
 public class Medication implements IClinicalAct {
 	private String patientId;
 	private String clinicalActId;
+	private String name;
 	private String rxNumber;
 	private Date start;
 	private Date end;
@@ -31,6 +32,14 @@ public class Medication implements IClinicalAct {
 		this.clinicalActId = clinicalActId;
 	}
 
+	public String getRxName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public String getRxNumber() {
 		return rxNumber;
 	}
@@ -78,6 +87,7 @@ public class Medication implements IClinicalAct {
 		result = prime * result + ((age == null) ? 0 : age.hashCode());
 		result = prime * result + ((clinicalActId == null) ? 0 : clinicalActId.hashCode());
 		result = prime * result + ((end == null) ? 0 : end.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((patientId == null) ? 0 : patientId.hashCode());
 		result = prime * result + ((rxNumber == null) ? 0 : rxNumber.hashCode());
 		result = prime * result + ((start == null) ? 0 : start.hashCode());
@@ -109,6 +119,11 @@ public class Medication implements IClinicalAct {
 				return false;
 		} else if (!end.equals(other.end))
 			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
 		if (patientId == null) {
 			if (other.patientId != null)
 				return false;
@@ -131,8 +146,9 @@ public class Medication implements IClinicalAct {
 
 	@Override
 	public String toString() {
-		return "Medication [patientId=" + patientId + ", clinicalActId=" + clinicalActId + ", rxNumber=" + rxNumber
-				+ ", start=" + start + ", end=" + end + ", age=" + age + ", status=" + status + "]";
+		return "Medication [patientId=" + patientId + ", clinicalActId=" + clinicalActId + ", name=" + name
+				+ ", rxNumber=" + rxNumber + ", start=" + start + ", end=" + end + ", age=" + age + ", status=" + status
+				+ "]";
 	}
 
 }
