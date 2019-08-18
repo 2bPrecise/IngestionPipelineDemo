@@ -62,6 +62,7 @@ public class JsonParserBolt  extends BaseRichBolt {
 			for (Map<String,String> record: records) {
 				EntityDto row = DtoBuilder.build(record);
 				String recordContextId = _contextProvider.contextIdWithItem(contextId, recordNumber);
+				row.contextid = recordContextId;
 				_collector.emit(ParserTopology.Streams.JSON, input, new Values(recordContextId, row));
 				Log.trace("emitting {} {}", recordContextId, row);
 				recordNumber++;

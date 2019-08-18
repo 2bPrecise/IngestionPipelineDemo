@@ -57,6 +57,7 @@ public class CsvParserBolt  extends BaseRichBolt {
 			for (CSVRecord record : records) {
 				EntityDto row = DtoBuilder.build(record.toMap());
 				String recordContextId = _contextProvider.contextIdWithItem(contextId, recordNumber);
+				row.contextid = recordContextId;
 				_collector.emit(ParserTopology.Streams.CSV, input, new Values(recordContextId, row));
 				Log.trace("emitting {} {}", recordContextId, row);
 				recordNumber++;
