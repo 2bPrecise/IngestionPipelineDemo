@@ -13,6 +13,8 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.tobprecise.demo.config.AppConfig;
 import com.tobprecise.demo.config.AppConfigReader;
@@ -26,6 +28,8 @@ import com.tobprecise.demo.topologies.ParserTopology;
 
 public class CsvParserBolt  extends BaseRichBolt {
 
+	private static final Logger Log = LoggerFactory.getLogger(CsvParserBolt.class);
+			
 	private OutputCollector _collector;
 	private IFileProvider _fileProvider;
 	private IContextProvider _contextProvider;
@@ -33,6 +37,7 @@ public class CsvParserBolt  extends BaseRichBolt {
 
 	@Override
 	public void prepare(Map<String, Object> config, TopologyContext context, OutputCollector collector) {
+		Log.debug("preparing");
 		_collector = collector;
 		AppConfig appConfig = AppConfigReader.read(config);
 		_fileProvider = ProviderFactory.getFileProvider(appConfig);
@@ -42,6 +47,7 @@ public class CsvParserBolt  extends BaseRichBolt {
 
 	@Override
 	public void execute(Tuple input) {
+		Log.trace("executing on {}", input);
 		String contextId = input.getStringByField(RecordScheme.CONTEXT_ID);
 		FileMetadata metadata = (FileMetadata) input.getValueByField(RecordScheme.FILE_METADATA);
 		
@@ -52,13 +58,16 @@ public class CsvParserBolt  extends BaseRichBolt {
 				EntityDto row = DtoBuilder.build(record.toMap());
 				String recordContextId = _contextProvider.contextIdWithItem(contextId, recordNumber);
 				_collector.emit(ParserTopology.Streams.CSV, input, new Values(recordContextId, row));
+				Log.trace("emitting {} {}", recordContextId, row);
 				recordNumber++;
 			}
 			_contextProvider.setExpectedItems(contextId, recordNumber);
 		} catch (Throwable t) { 
 			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values(contextId, metadata, "Error: " + t.getMessage()));
+			Log.trace("discarding", t);
 		}
 		_collector.ack(input);
+		Log.trace("acking");
 	}
 
 	@Override

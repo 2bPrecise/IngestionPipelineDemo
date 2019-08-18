@@ -10,6 +10,8 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.tobprecise.demo.config.AppConfig;
 import com.tobprecise.demo.config.AppConfigReader;
@@ -21,11 +23,14 @@ import com.tobprecise.demo.topologies.ProcessorTopology;
 
 public class AgeBolt  extends BaseRichBolt {
 
+	private static final Logger Log = LoggerFactory.getLogger(AgeBolt.class);
+	
 	private IPatientProvider _patientProvider;
 	private OutputCollector _collector;
 
 	@Override
 	public void prepare(Map<String, Object> config, TopologyContext context, OutputCollector collector) {
+		Log.debug("preparing");
 		_collector = collector;
 		AppConfig appConfig = AppConfigReader.read(config);
 		_patientProvider = ProviderFactory.getPatientProvider(appConfig);
@@ -33,6 +38,7 @@ public class AgeBolt  extends BaseRichBolt {
 
 	@Override
 	public void execute(Tuple input) {
+		Log.trace("executing on {}", input);
 		String contextId = input.getStringByField(RecordScheme.CONTEXT_ID);
 		IClinicalAct act = (IClinicalAct) input.getValueByField(RecordScheme.RECORD);
 

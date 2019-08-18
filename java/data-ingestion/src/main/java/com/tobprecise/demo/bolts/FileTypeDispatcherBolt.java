@@ -10,6 +10,8 @@ import org.apache.storm.topology.base.BaseRichBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.tobprecise.demo.config.AppConfig;
@@ -21,12 +23,15 @@ import com.tobprecise.demo.topologies.ParserTopology;
 
 public class FileTypeDispatcherBolt extends BaseRichBolt {
 
+	private static final Logger Log = LoggerFactory.getLogger(FileTypeDispatcherBolt.class);
+	
 	private IContextProvider _contextProvider;
 	private OutputCollector _collector;
 	private Gson _gson;
 
 	@Override
 	public void prepare(Map<String, Object> config, TopologyContext context, OutputCollector collector) {
+		Log.debug("preparing");
 		_collector = collector;
 		AppConfig appConfig = AppConfigReader.read(config);
 		_contextProvider = ProviderFactory.getContextProvider(appConfig);
@@ -35,6 +40,7 @@ public class FileTypeDispatcherBolt extends BaseRichBolt {
 
 	@Override
 	public void execute(Tuple input) {
+		Log.trace("executing on {}", input);
 		
 		FileMetadata metadata = null;
 		
@@ -44,6 +50,7 @@ public class FileTypeDispatcherBolt extends BaseRichBolt {
 		} catch (Exception ex) {
 			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values("", null, ex.getMessage()));
 			_collector.ack(input);		
+			Log.trace("discarding", ex);
 			return;
 		}
 		
@@ -51,14 +58,18 @@ public class FileTypeDispatcherBolt extends BaseRichBolt {
 		
 		if (isCsv(metadata.getOriginalName())) {
 			_collector.emit(ParserTopology.Streams.CSV, input, new Values(context, metadata));
+			Log.trace("emitting {} {} to csv", context, metadata);
 		}
 		else if (isJson(metadata.getOriginalName())) {
 			_collector.emit(ParserTopology.Streams.JSON, input, new Values(context, metadata));
+			Log.trace("emitting {} {} to json", context, metadata);
 		} else {
 			_collector.emit(ParserTopology.Streams.DISCARD, input, new Values(context, metadata, "Unrecognized file type"));
+			Log.trace("discarding {} {} - unknown format", context, metadata);
 		}
 		
-		_collector.ack(input);		
+		_collector.ack(input);
+		Log.trace("acking {}", input);
 		
 	}
 
