@@ -1,0 +1,40 @@
+[
+    {
+        "type": "demography",
+        "patientid": "10011",
+        "givenname": "Ronnie",
+        "familyname": "Van Zant",
+        "gender": "Male",
+        "dateofbirth": "1948-01-15",
+        "isdeceased": true
+    },
+    {
+        "type": "demography",
+        "patientid": "10012",
+        "givenname": "Gary",
+        "familyname": "Rossington",
+        "gender": "Male",
+        "dateofbirth": "1951-12-04",
+        "isdeceased": false
+    },
+    {
+        "type": "medication",
+        "patientid": "10011",
+        "clinicalactid": "10011m1",
+        "rxnumber": "1191",
+        "medicationname": "Aspirin",
+        "medicationstart": "2015-10-08",
+        "medicationend": "",
+        "medicationstatus": "Inactive"
+    },
+    {
+        "type": "medication",
+        "patientid": "10012",
+        "clinicalactid": "10012m2",
+        "rxnumber": "83367",
+        "medicationname": "atorvastatin",
+        "medicationstart": "2016-05-08",
+        "medicationend": "",
+        "medicationstatus": "Active"
+    }
+]
