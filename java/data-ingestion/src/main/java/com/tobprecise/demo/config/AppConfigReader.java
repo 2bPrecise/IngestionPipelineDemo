@@ -57,7 +57,7 @@ public class AppConfigReader {
 		}
 	}
 	
-	public static KafkaSpoutConfig createKafkaSpoutConfig(AppConfig appConfig, String topic, Class valueDeserializer) {
+	public static KafkaSpoutConfig createKafkaSpoutConfig(AppConfig appConfig, String topic) {
 		KafkaSpoutRetryService retryService = new KafkaSpoutRetryExponentialBackoff(
 				TimeInterval.milliSeconds(10),
 				TimeInterval.milliSeconds(10),
@@ -69,7 +69,6 @@ public class AppConfigReader {
 				.setFirstPollOffsetStrategy(FirstPollOffsetStrategy.UNCOMMITTED_EARLIEST)
 				.setProcessingGuarantee(ProcessingGuarantee.AT_LEAST_ONCE)
 				.setProp(ConsumerConfig.GROUP_ID_CONFIG, "storm." + topic)
-	            .setProp(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, valueDeserializer)
 				.build();
 		return spoutConfig;
 	}

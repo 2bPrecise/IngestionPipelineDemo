@@ -15,7 +15,6 @@ import com.tobprecise.demo.bolts.DbWriterBolt;
 import com.tobprecise.demo.bolts.DiscardBolt;
 import com.tobprecise.demo.config.AppConfig;
 import com.tobprecise.demo.config.AppConfigReader;
-import com.tobprecise.demo.entities.dto.DtoDeserializer;
 
 public class ProcessorTopology {
 	public static void main(String[] args) throws Exception {
@@ -25,7 +24,7 @@ public class ProcessorTopology {
 		TopologyBuilder builder = new TopologyBuilder();
 		
 		builder.setSpout(Components.SPOUT, new KafkaSpout(
-				AppConfigReader.createKafkaSpoutConfig(appConfig, appConfig.recordsTopic, DtoDeserializer.class)
+				AppConfigReader.createKafkaSpoutConfig(appConfig, appConfig.recordsTopic)
 				));
 		
 		builder.setBolt(Components.CONVERTER, new ConverterBolt())

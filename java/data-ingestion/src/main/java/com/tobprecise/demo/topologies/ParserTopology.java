@@ -1,6 +1,5 @@
 package com.tobprecise.demo.topologies;
 
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -26,7 +25,7 @@ public class ParserTopology {
 		TopologyBuilder builder = new TopologyBuilder();
 		
 		builder.setSpout(Components.SPOUT, new KafkaSpout(
-				AppConfigReader.createKafkaSpoutConfig(appConfig, appConfig.inboxTopic, StringDeserializer.class)
+				AppConfigReader.createKafkaSpoutConfig(appConfig, appConfig.inboxTopic)
 				));
 		
 		builder.setBolt(Components.DISPATCHER, new FileTypeDispatcherBolt())
