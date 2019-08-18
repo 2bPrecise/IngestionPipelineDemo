@@ -29,4 +29,14 @@ public class EntityDto implements Serializable {
 	public String medicationend;
 	public String medicationstatus;
 	// age is calculated according to start and date of birth
+	
+	@Override
+	public String toString() {
+		return "EntityDto [type=" + type + ", contextid=" + contextid + ", patientid=" + patientid + ", givenname="
+				+ givenname + ", familyname=" + familyname + ", gender=" + gender + ", dateofbirth=" + dateofbirth
+				+ ", isdeceased=" + isdeceased + ", clinicalactid=" + clinicalactid + ", medicationname="
+				+ medicationname + ", rxnumber=" + rxnumber + ", medicationstart=" + medicationstart
+				+ ", medicationend=" + medicationend + ", medicationstatus=" + medicationstatus + "]";
+	}
+	
 }
