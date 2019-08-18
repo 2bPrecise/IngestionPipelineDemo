@@ -14,11 +14,16 @@ import org.apache.storm.kafka.spout.KafkaSpoutRetryExponentialBackoff;
 import org.apache.storm.kafka.spout.KafkaSpoutRetryService;
 import org.apache.storm.kafka.spout.KafkaSpoutConfig.ProcessingGuarantee;
 import org.apache.storm.kafka.spout.KafkaSpoutRetryExponentialBackoff.TimeInterval;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
+import static java.lang.Math.toIntExact;
 
 public class AppConfigReader {
 	
+	private static final Logger Log = LoggerFactory.getLogger(AppConfigReader.class);
+
 	public static AppConfig read(String fileName) throws FileNotFoundException, IOException {
 		Yaml yaml = new Yaml(new Constructor(AppConfig.class));
 		try (InputStream appConfigYaml = new FileInputStream(fileName)) {
@@ -30,8 +35,14 @@ public class AppConfigReader {
 		AppConfig appConfig = new AppConfig();
 		for (Field field : AppConfig.class.getDeclaredFields()) {
 			try {
-				field.set(appConfig, stormConfig.get("app." + field.getName()));
+				Object value = stormConfig.get("app." + field.getName());
+				if (field.getType() == int.class && (value instanceof Long)) { 
+					field.set(appConfig, toIntExact((long)value));
+				} else {
+					field.set(appConfig, value);
+				}
 			} catch (IllegalArgumentException | IllegalAccessException e) {
+				Log.error(field.getName(), e);
 			}
 		}
 		return appConfig;
