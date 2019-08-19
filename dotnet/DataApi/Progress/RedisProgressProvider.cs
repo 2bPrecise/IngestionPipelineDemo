@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -28,10 +29,10 @@ namespace ToBePrecise.Demo.DataApi.Progress
                 var progress = progressEntries.ToDictionary();
                 var fileId = progress["fileId"].IsNullOrEmpty ? "" : progress["fileId"].ToString();
                 var fileName = progress["fileName"].IsNullOrEmpty ? "" : progress["fileName"].ToString();
-                int numberOfItems = progress["items"].IsInteger ? (int)progress["items"] : 0;
+                int numberOfItems = IntVal(progress["items"]);
                 var items = new bool[numberOfItems];
                 for (int i = 0; i < numberOfItems; i++) {
-                    items[i] = progress[i].IsInteger ? ((int)progress[i] > 0) : false;
+                    items[i] = IntVal(progress[i]) > 0;
                 }
                 report.Add(new ProcessingProgress() {
                     FileId = fileId,
@@ -44,6 +45,9 @@ namespace ToBePrecise.Demo.DataApi.Progress
 
         private string RedisKey(string id) {
             return $"context{id}";
+        }
+        private int IntVal(RedisValue val) {
+            return val.IsNullOrEmpty ? 0 : (val.IsInteger ? (int)val : Int32.Parse(val));
         }
     }
 }

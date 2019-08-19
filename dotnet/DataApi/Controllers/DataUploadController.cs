@@ -8,6 +8,7 @@ using ToBePrecise.Demo.DataApi.FileStorage;
 using ToBePrecise.Demo.DataApi.Messaging;
 using ToBePrecise.Demo.DataApi.Models;
 using ToBePrecise.Demo.DataApi.Progress;
+using Newtonsoft.Json;
 
 namespace ToBePrecise.Demo.DataApi.Controllers
 {
@@ -41,9 +42,10 @@ namespace ToBePrecise.Demo.DataApi.Controllers
         }
 
         [HttpGet("progress/{FileId}")]
-        public async Task<IEnumerable<ProcessingProgress>> Progress([FromRoute] string FileId) 
+        public async Task<IActionResult> Progress([FromRoute] string FileId) 
         {
-            return await _progress.GetProgress(FileId);
+            var result = await _progress.GetProgress(FileId);
+            return Content(JsonConvert.SerializeObject(result), "application/json");
         }
     }
 }
