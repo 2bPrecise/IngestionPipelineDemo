@@ -24,7 +24,7 @@ public class MongoPatientProvider implements IPatientProvider {
 		MongoClient mongoClient = new MongoClient(uri);
 		final Morphia morphia = new Morphia();
 		morphia.mapPackage("com.tobprecise.demo.entities.clinical");
-		datastore = morphia.createDatastore(mongoClient, "xcgr");
+		datastore = morphia.createDatastore(mongoClient, "clinical");
 		datastore.ensureIndexes();
 	}
 	
