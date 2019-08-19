@@ -24,7 +24,7 @@ public class DiscardBolt  extends BaseRichBolt {
 
 	@Override
 	public void execute(Tuple input) {
-		Log.trace("executing on {}", input);
+		Log.warn("discarded {}", input);
 		_collector.ack(input);
 	}
 
