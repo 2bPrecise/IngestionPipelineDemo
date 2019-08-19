@@ -19,8 +19,8 @@
     },
     {
         "type": "medication",
-        "patientid": "10011",
-        "clinicalactid": "10011m1",
+        "patientid": "10012",
+        "clinicalactid": "10012m1",
         "rxnumber": "1191",
         "medicationname": "Aspirin",
         "medicationstart": "2015-10-08",
