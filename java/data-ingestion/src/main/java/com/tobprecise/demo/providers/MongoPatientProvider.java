@@ -40,7 +40,8 @@ public class MongoPatientProvider implements IPatientProvider {
 	public void saveDemography(String patientId, Demography demography) {
 		Patient patient = getPatient(patientId);
 		if (patient == null) {
-			return;
+			patient = new Patient();
+			patient.setPatientId(patientId);
 		}
 		patient.setDemography(demography);
 		datastore.save(patient);
@@ -49,7 +50,8 @@ public class MongoPatientProvider implements IPatientProvider {
 	public void saveMedication(String patientId, Medication medication) {
 		Patient patient = getPatient(patientId);
 		if (patient == null) {
-			return;
+			patient = new Patient();
+			patient.setPatientId(patientId);
 		}
 		if (patient.getMedications() == null) {
 			patient.setMedications(new ArrayList<Medication>());
