@@ -1,10 +1,11 @@
 package com.tobprecise.demo.entities.clinical;
 
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import com.tobprecise.demo.entities.dto.EntityDto;
 
@@ -26,26 +27,26 @@ public abstract class ClinicalEntityBuilder<T extends IClinicalEntity> {
 	}
 	
 
-	private static final List<DateTimeFormatter> formatters = Arrays.asList(
-		DateTimeFormatter.RFC_1123_DATE_TIME, // Tue, 3 Jun 2008 11:05:30 GMT
-		DateTimeFormatter.ISO_INSTANT,        // 2011-12-03T10:15:30Z
-		DateTimeFormatter.ISO_LOCAL_DATE,     // 2011-12-03
-		DateTimeFormatter.BASIC_ISO_DATE      // 20111203
-	);
-			
+	private static final List<SimpleDateFormat> formatters = createSimpleDateFormatList(Arrays.asList(
+		"yyyy-MM-dd'T'HH:mm:ss", // ISO_INSTANT 2011-12-03T10:15:30Z
+		"yyyy-MM-dd",          // ISO_LOCAL_DATE 2011-12-03
+		"yyyyMMdd"             // BASIC_ISO_DATE 20111203
+	));
+
+	
 	protected Date resolveDate(String value) {
 		value = trim(value);
 		if (value == null) {
 			return null;
 		}
-		for (DateTimeFormatter formatter: formatters) {
+		for (SimpleDateFormat formatter: formatters) {
 			try {
-				return Date.from(formatter.parse(value, Instant::from));
+				return formatter.parse(value);
 			} catch (Exception e) {}
 		}
 		return null;
 	}
-	
+
 	protected Boolean resolveBoolean(String value) {
 		value = trim(value);
 		return Boolean.valueOf(value);
@@ -56,5 +57,19 @@ public abstract class ClinicalEntityBuilder<T extends IClinicalEntity> {
 			return null;
 		}
 		return value.trim();
+	}
+	
+	private static List<SimpleDateFormat> createSimpleDateFormatList(List<String> patterns) {
+		ArrayList<SimpleDateFormat> formats = new ArrayList<SimpleDateFormat>();
+		patterns.forEach((pattern) -> {
+			formats.add(createSimpleDateFormat(pattern));
+		});
+		return formats;
+	}
+	private static SimpleDateFormat createSimpleDateFormat(String pattern) {
+		SimpleDateFormat df = new SimpleDateFormat(pattern);
+		df.setLenient(false);
+		df.setTimeZone(TimeZone.getTimeZone("UTC")); // should be tenant timezone
+		return df;
 	}
 }
