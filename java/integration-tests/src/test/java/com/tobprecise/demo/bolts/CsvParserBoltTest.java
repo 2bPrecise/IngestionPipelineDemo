@@ -53,7 +53,7 @@ public class CsvParserBoltTest {
 	    metadata.setRelativePath(temp.getAbsolutePath());
 	    
 		MkTupleParam params = new MkTupleParam();
-		params.setFields(RecordScheme.CONTEXT_ID, RecordScheme.RECORD);
+		params.setFields(RecordScheme.CONTEXT_ID, RecordScheme.FILE_METADATA);
 	    Tuple input = Testing.testTuple(new Values(CONTEXTID, metadata), params);
 
 	    IContextProvider mockContext = Mockito.mock(IContextProvider.class);

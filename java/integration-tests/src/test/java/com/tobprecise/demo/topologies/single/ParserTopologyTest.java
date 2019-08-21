@@ -1,26 +1,20 @@
 package com.tobprecise.demo.topologies.single;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.storm.kafka.spout.KafkaSpout;
 import org.apache.storm.shade.org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 
 import com.google.gson.Gson;
 import com.tobprecise.demo.entities.FileMetadata;
-import com.tobprecise.demo.entities.dto.EntityDto;
 import com.tobprecise.demo.providers.IContextProvider;
-import com.tobprecise.demo.providers.IEntityProducer;
 import com.tobprecise.demo.providers.IFileProvider;
 import com.tobprecise.demo.providers.ProviderFactory;
 import com.tobprecise.demo.topologies.ParserTopology;
@@ -48,11 +42,9 @@ public class ParserTopologyTest extends TopologyTestBase {
 		//
 		IContextProvider mockContextProvider = Mockito.mock(IContextProvider.class);
 		IFileProvider mockFileProvider = Mockito.mock(IFileProvider.class);
-		IEntityProducer mockEntityProducer = Mockito.mock(IEntityProducer.class);
 				
 		ProviderFactory.mockContextProvider = mockContextProvider;
 		ProviderFactory.mockFileProvider = mockFileProvider;
-		ProviderFactory.mockEntityProducer = mockEntityProducer;
 		
 	    FileMetadata csvMetadata = new FileMetadata();
 	    csvMetadata.setFileId(CsvFileId);
@@ -69,9 +61,7 @@ public class ParserTopologyTest extends TopologyTestBase {
 
 		when(mockFileProvider.download(csvMetadata)).thenReturn(IOUtils.toInputStream(CsvContent, Charset.defaultCharset()));
 		when(mockFileProvider.download(jsonMetadata)).thenReturn(IOUtils.toInputStream(JsonContent, Charset.defaultCharset()));
-	    
-		when(mockEntityProducer.produce(any<EntityDto>());
-		
+	    		
 		Gson gson = new Gson();
 		KafkaSpout.produce("inbox", gson.toJson(csvMetadata));
 		KafkaSpout.produce("inbox", gson.toJson(jsonMetadata));
@@ -98,19 +88,6 @@ public class ParserTopologyTest extends TopologyTestBase {
 	    verify(mockContextProvider, times(1)).contextIdWithItem(JsonContextId, 0);
 	    verify(mockContextProvider, times(1)).contextIdWithItem(JsonContextId, 1);
 	    
-	    verify(mockEntityProducer, times(4)).produce(isA(EntityDto.class));
-	    List<EntityDto> results = producerArgs.getAllValues();
-	    assertEquals(4, results.size());
-	    Collections.sort(results, new Comparator<EntityDto>() {
-	    	@Override
-	    	public int compare(EntityDto a, EntityDto b) {
-	    		return a.givenname.compareTo(b.givenname);
-	    	}
-	    });
-	    assertEquals("aa0", results.get(0).givenname);
-	    assertEquals("bb1", results.get(1).familyname);
-	    assertEquals("cc2", results.get(2).gender);
-	    assertEquals("dd1", results.get(2).familyname);
 	}
 	
 }

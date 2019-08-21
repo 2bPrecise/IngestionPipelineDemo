@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.Properties;
 
-import org.apache.storm.utils.Utils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
@@ -32,7 +31,6 @@ public abstract class TopologyTestBase  {
 	
 	
 	protected final void runTopology(RunnableTopology topologyRunner, int timeoutSeconds) throws Exception {
-		Utils.sleep(5000);
 		prop.setProperty("localRunForSeconds", Integer.toString(timeoutSeconds));
 		// write modified properties file - which will be loaded by topology
 		File configFile = configFolder.newFile();

@@ -1,8 +1,5 @@
 package org.apache.storm.kafka.spout;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -17,8 +14,6 @@ import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.utils.Utils;
-
-import com.tobprecise.demo.entities.dto.EntityDto;
 
 public class KafkaSpout<K, V> extends BaseRichSpout {
 
