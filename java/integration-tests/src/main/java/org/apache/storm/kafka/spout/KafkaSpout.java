@@ -92,17 +92,7 @@ public class KafkaSpout<K, V> extends BaseRichSpout {
 	public static void produce(String topic, String msg) {
 		produce(topic, ByteBuffer.wrap(msg.getBytes(StandardCharsets.UTF_8)));
 	}
-	
-	public static void produce(String topic, EntityDto msg) {
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ObjectOutputStream out = new ObjectOutputStream(baos);
-			out.writeObject(msg);
-			produce(topic, ByteBuffer.wrap(baos.toByteArray()));
-			baos.close();
-		} catch (IOException e) {}
-	}
-	
+		
 	private static void produce(String topic, ByteBuffer msg) {
 		Integer msgId =  (int) Math.round(Math.random() * 1000000);
 		ConcurrentLinkedQueue<Integer> topicQueue = queue.computeIfAbsent(topic, t -> new ConcurrentLinkedQueue<Integer>());

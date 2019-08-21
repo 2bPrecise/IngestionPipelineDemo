@@ -17,18 +17,12 @@ import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.storm.kafka.spout.KafkaSpout;
 
-import com.google.gson.Gson;
-import com.tobprecise.demo.entities.dto.EntityDto;
-
 public class KafkaProducer<K, V> implements Producer<K, V> {
 
 	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 	private static ConcurrentHashMap<String, List<String>> producedStrings = new ConcurrentHashMap<String, List<String>>();
-	private static ConcurrentHashMap<String, List<byte[]>> producedBytes = new ConcurrentHashMap<String, List<byte[]>>();
-	private boolean isBytes;
 	
     public KafkaProducer(Properties properties) {
-    	isBytes = properties.getProperty("value.serializer", "").contains("ByteArraySerializer");
     }
     
 	@Override
@@ -54,16 +48,10 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
 	private long saveRecord(ProducerRecord<K, V> record) {
 		String topic = record.topic();
 		long offset;
-		if (isBytes) {
-			producedBytes.computeIfAbsent(topic, t -> new ArrayList<byte[]>());
-			producedBytes.get(topic).add((byte[]) record.value());
-			offset = producedBytes.get(topic).size();
-		} else {
-			producedStrings.computeIfAbsent(topic, t -> new ArrayList<String>());
-			producedStrings.get(topic).add((String) record.value());
-			offset = producedStrings.get(topic).size();
-			KafkaSpout.produce(topic, (String) record.value());
-		}
+		producedStrings.computeIfAbsent(topic, t -> new ArrayList<String>());
+		producedStrings.get(topic).add((String) record.value());
+		offset = producedStrings.get(topic).size();
+		KafkaSpout.produce(topic, (String) record.value());
 		return offset;
 	}
 	@Override
@@ -92,22 +80,8 @@ public class KafkaProducer<K, V> implements Producer<K, V> {
 		return producedStrings.computeIfAbsent(topic, t -> new ArrayList<String>());
 	}	
 	
-	public static List<byte[]> getProducedByteArrays(String topic) {
-		return producedBytes.computeIfAbsent(topic, t -> new ArrayList<byte[]>());
-	}
-	
-	public static List<EntityDto> getProducedEntities() {
-		List<EntityDto> records = new ArrayList<EntityDto>();
-		Gson gson = new Gson();
-		for (String summaryJson : getProducedStrings("gpm.geneticresults.summary")) {
-			records.add(gson.fromJson(summaryJson, EntityDto.class));
-		}
-		return records;
-	}
-	
 	public static void clear() {
 		producedStrings.clear();
-		producedBytes.clear();
 	}
 
 }
