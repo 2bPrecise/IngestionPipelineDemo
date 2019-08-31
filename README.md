@@ -13,9 +13,11 @@ The pipeline stages are:
 ![Architecture diagram](https://raw.githubusercontent.com/2bPrecise/IngestionPipelineDemo/master/Architecture.png)
 
 
-Apache Storm topologies:
+## Parser topology
 
 ![Parser Topology](https://raw.githubusercontent.com/2bPrecise/IngestionPipelineDemo/master/parserTopologyStructure.png)
+
+## Processor toplogy
 
 ![Processor Topology](https://raw.githubusercontent.com/2bPrecise/IngestionPipelineDemo/master/processorTopologyStructure.png)
 
