@@ -21,3 +21,16 @@ The pipeline stages are:
 
 ![Processor Topology](https://raw.githubusercontent.com/2bPrecise/IngestionPipelineDemo/master/processorTopologyStructure.png)
 
+## What features are demonstrated here
+
+1. Interoperability: Communicate between components using JSON objects
+2. Cross topology context
+3. Examples of unit and integration testing
+
+## What you will not find here, but you should consider doing
+
+1. Logging and monitoring
+2. Extensibility (for example: plugins)
+3. Handle timezones
+4. Pririty queues
+
