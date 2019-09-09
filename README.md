@@ -31,6 +31,6 @@ The pipeline stages are:
 
 1. Logging and monitoring
 2. Extensibility (for example: plugins)
-3. Handle timezones
-4. Pririty queues
+3. Priority queues
+4. Handle timezones
 
